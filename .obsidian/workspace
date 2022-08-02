@@ -9,9 +9,9 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "README.md",
+            "file": "Plugin Configurations/README.md",
             "mode": "source",
-            "source": false
+            "source": true
           }
         }
       }
@@ -77,7 +77,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "Plugin Configurations/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -94,7 +94,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "README.md",
+                "file": "Plugin Configurations/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -117,7 +117,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "README.md"
+                "file": "Plugin Configurations/README.md"
               }
             }
           }
@@ -129,5 +129,10 @@
     "collapsed": true
   },
   "active": "d92dc67436f27159",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Premium Plugin Configurations/README.md",
+    "Server Configurations/README.md",
+    "Web Server Configurations/README.md",
+    "README.md"
+  ]
 }
