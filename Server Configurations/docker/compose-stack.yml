@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  mc:
+    image: itzg/minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      # replace with a value greater than 4 but lower than 12 if you need to adjust memory consumption. 
+      MEMORY: 4G
+      EULA: "TRUE"
+      # replace with PAPER if you want to use paper.
+      TYPE: PURPUR
+    volumes:
+      - mc:/data
+  monitor:
+    image: itzg/mc-monitor
+    command: export-for-prometheus
+    environment:
+      EXPORT_SERVERS: mc
+      DEBUG: "true"
+    depends_on:
+      - mc
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    ports:
+      - "8180:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-tsdb:/prometheus
+    depends_on:
+      - monitor
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports:
+      - "80:3000"
+    volumes:
+      - grafana-lib:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./dashboards:/etc/grafana/dashboards
+    depends_on:
+      - prometheus
+  backups:
+    image: itzg/mc-backup
+    environment:
+      BACKUP_INTERVAL: "1d"
+    volumes:
+      # mount the same volume used by server, but read-only
+      - mc:/data:ro
+      # use a host attached directory so that it in turn can be backed up
+      # to external/cloud storage
+      - ./mc-backups:/backups
+    # share network namespace with server to simplify rcon access
+    network_mode: "service:mc"
+
+volumes:
+  mc: 
+    driver_opts:
+      type: none
+      # Replace <user> with linux username and <folder> with the folder inside of ~ you want the server data placed.
+      device: /svr/minecraft
+      o: bind
+  prometheus-tsdb: {}
+  grafana-lib: {}
